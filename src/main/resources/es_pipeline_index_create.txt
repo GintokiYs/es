@@ -1,0 +1,131 @@
+//ES管道及索引的构建
+1.建管道
+PUT _ingest/pipeline/doc_attachment
+{
+  "description": "单文件管道流",
+  "processors": [
+    {
+      "attachment": {
+       "field": "data",
+       "indexed_chars": "-1",
+       "ignore_missing": true
+      }
+    },{
+     "remove":{"field":"data"}
+    }
+  ]
+}
+
+2.建索引
+POST minio_doc_index/_doc
+{
+  "mappings": {
+    "info": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "createTime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "url": {
+          "type": "keyword"
+        },
+        "filename": {
+          "type": "text",
+          "analyzer": "ik_max_word"
+        },
+        "attachment": {
+          "properties": {
+            "content": {
+              "type": "text",
+              "analyzer": "ik_max_word"
+            },
+            "content_type": {
+              "type": "text",
+              "analyzer": "ik_max_word"
+            },
+            "title": {
+              "type": "text",
+              "analyzer": "ik_max_word"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+POST minio_photo_index/_doc
+{
+  "mappings": {
+    "info": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "createTime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "url": {
+          "type": "keyword"
+        },
+        "filename": {
+          "type": "text",
+          "analyzer": "ik_max_word"
+        }
+      }
+    }
+  }
+}
+
+POST minio_video_index/_doc
+{
+  "mappings": {
+    "info": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "createTime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "url": {
+          "type": "keyword"
+        },
+        "filename": {
+          "type": "text",
+          "analyzer": "ik_max_word"
+        }
+      }
+    }
+  }
+}
+
+POST minio_other_index/_doc
+{
+  "mappings": {
+    "info": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "createTime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "url": {
+          "type": "keyword"
+        },
+        "filename": {
+          "type": "text",
+          "analyzer": "ik_max_word"
+        }
+      }
+    }
+  }
+}
+
